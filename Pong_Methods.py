@@ -3,7 +3,7 @@ import random
 import time
 import numpy as np
 
-def x_dist(turt1,turt2):
+def x_dist(turt1,turt2):                       #Gives x/y distances between two objects for block collisions
     return abs(turt1.xcor() - turt2.xcor())
 def y_dist(turt1,turt2):
     return abs(turt1.ycor() - turt2.ycor())
@@ -14,14 +14,14 @@ class Block(Turtle):
         super().__init__()
         self.make_block(pos)
 
-    def make_block(self,pos):
+    def make_block(self,pos,len=6,wid=.7):
         self.penup()
-        self.goto(pos)
+        self.goto(pos)                     #Puts penup to avoid drawing line and creates block with specific width/height at given coords
         self.shape('square')
         self.width = 21
         self.height = 75
-        self.shapesize(6,.7,1)
-        if self.xcor() > 0:
+        self.shapesize(len,wid,1)
+        if self.xcor() > 0:              #Right block is red, left block is blue. Decorations in middle are white
             self.color('red')
         elif self.xcor() < 0:
             self.color('blue')
@@ -68,11 +68,18 @@ class Ball(Turtle):
         x = self.xcor() + self.x_vel
         y = self.ycor() + self.y_vel
         self.goto((x,y))
-    def bounce(self,x_flag,y_flag):
-        if x_flag == 1:
-            self.x_vel = -self.x_vel
-        if y_flag == 1:
-            self.y_vel = -self.y_vel
+    def bounce(self,x_flag,y_flag,accel_mode):
+        if accel_mode != 'a':
+            if x_flag == 1:
+                self.x_vel = -self.x_vel
+            if y_flag == 1:
+                self.y_vel = -self.y_vel
+        else:
+            if x_flag == 1:
+                self.x_vel = -1.1*self.x_vel
+            if y_flag == 1:
+                self.y_vel = -1.05*self.y_vel
+
 
 
 
@@ -114,17 +121,29 @@ class Scoreboard(Turtle):
 
     def victory(self):
         if self.score1 > self.score2:
-            self.left.goto(-200,100)
+            self.left.goto(-240,100)
             self.left.write(f'Blue Wins!',font=('Comic Sans', 80))
-            self.left.goto(-220, 10)
+            self.left.goto(-260, 10)
             time.sleep(1)
-            self.left.write(f'Score is {self.score1}:{self.score2}', font=('Comic Sans', 80))
+            self.left.write(f'Score is', font=('Comic Sans', 80))
+            self.left.goto(170,10)
+            self.left.write(f'{self.score1}', font=('Comic Sans', 80))
+            self.left.goto(230, 10)
+            self.left.write(':', font=('Comic Sans', 80))
+            self.right.goto(255,10)
+            self.right.write(f'{self.score2}',font=('Comic Sans', 80))
         else:
-            self.right.goto(-200,100)
+            self.right.goto(-240,100)
             self.right.write(f'Red Wins!',font=('Comic Sans', 80))
-            self.right.goto(-220,10)
+            self.right.goto(-260,10)
             time.sleep(1)
-            self.right.write(f'Score is {self.score1}:{self.score2}',font=('Comic Sans', 80))
+            self.right.write(f'Score is', font=('Comic Sans', 80))
+            self.left.goto(170, 10)
+            self.left.write(f'{self.score1}', font=('Comic Sans', 80))
+            self.right.goto(230, 10)
+            self.right.write(':', font=('Comic Sans', 80))
+            self.right.goto(255, 10)
+            self.right.write(f'{self.score2}', font=('Comic Sans', 80))
 
 
 
