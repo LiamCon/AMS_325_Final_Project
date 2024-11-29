@@ -13,6 +13,7 @@ class Block(Turtle):
     def __init__(self,pos):
         super().__init__()
         self.make_block(pos)
+        self.lockout = False
 
     def make_block(self,pos,len=6,wid=.7):
         self.penup()
@@ -28,13 +29,15 @@ class Block(Turtle):
         else:
             self.color('white')
     def go_up(self):
-        if self.ycor() < 320:
+        if not self.lockout and self.ycor() < 320:
             y = self.ycor() + 40
             self.goto((self.xcor(),y))
+        self.lockout = True
     def go_down(self):
-        if self.ycor() > -320:
+        if not self.lockout and self.ycor() > -320:
             y = self.ycor() - 40
             self.goto((self.xcor(),y))
+        self.lockout = True
 
 
 
@@ -146,5 +149,34 @@ class Scoreboard(Turtle):
             self.right.write(f'{self.score2}', font=('Comic Sans', 80))
 
 
+class Portal(Turtle):
+    def __init__(self, pos_1, pos_2):
+        super().__init__()
+        self.port1 = Turtle()
+        self.port2 = Turtle()
+        self.teleported = False
+        self.radius = 3
+        self.hideturtle()
+        self.port1.penup()
+        self.port2.penup()
+        self.port1.goto(pos_1)
+        self.port2.goto(pos_2)
+        self.port1.color('purple')
+        self.port2.color('dark violet')
+        self.port1.shape('circle')
+        self.port2.shape('circle')
+        self.port1.shapesize(self.radius,self.radius,0)
+        self.port2.shapesize(self.radius,self.radius, 0)
 
+    def teleport(self,portal,ball):
+        if portal == self.port1:
+            ball.hideturtle()
+            ball.goto(self.port2.pos())
+            ball.showturtle()
+
+        else:
+            ball.hideturtle()
+            ball.goto(self.port1.pos())
+            ball.showturtle()
+        self.teleported = True
 
