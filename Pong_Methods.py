@@ -10,34 +10,98 @@ def y_dist(turt1,turt2):
 
 
 class Block(Turtle):
-    def __init__(self,pos):
+    def __init__(self,pos,ball=None,pow1=0,pow2=0,pow3=0):
         super().__init__()
+        self.ball = ball
+        self.pow1 = pow1
+        self.pow2 = pow2
+        self.pow3 = pow3
         self.make_block(pos)
-        self.lockout = False
-
-    def make_block(self,pos,len=6,wid=.7):
+        self.move_lockout = False
+        self.pow1_lockout = False
+        self.pow2_lockout = False
+        self.pow3_lockout = False
+        self.pow2_is_active = False
+        self.beam = None
+        self.disabled = False
+    def make_block(self,pos):
         self.penup()
         self.goto(pos)                     #Puts penup to avoid drawing line and creates block with specific width/height at given coords
         self.shape('square')
         self.width = 21
         self.height = 75
-        self.shapesize(len,wid,1)
+        self.shapesize(6,.7,1)
+        self.move_dist = 40
         if self.xcor() > 0:              #Right block is red, left block is blue. Decorations in middle are white
             self.color('red')
         elif self.xcor() < 0:
             self.color('blue')
         else:
             self.color('white')
+        self.block_color = self.pencolor()
+    def set_other(self,block):
+        self.other = block
     def go_up(self):
-        if not self.lockout and self.ycor() < 320:
-            y = self.ycor() + 40
+        if not self.move_lockout and self.ycor() < 320:
+            y = self.ycor() + self.move_dist
             self.goto((self.xcor(),y))
-        self.lockout = True
+        self.move_lockout = True
     def go_down(self):
-        if not self.lockout and self.ycor() > -320:
-            y = self.ycor() - 40
+        if not self.move_lockout and self.ycor() > -320:
+            y = self.ycor() - self.move_dist
             self.goto((self.xcor(),y))
-        self.lockout = True
+        self.move_lockout = True
+
+    def psychic_bounce(self):
+        if not self.pow1_lockout and self.pow1 > 0 and abs(self.ball.ycor()) < 320:
+            color = self.ball.pencolor()
+            x, y = self.ball.xcor(), self.ball.ycor()
+            self.ball.color('DarkOrchid')
+            time.sleep(.2)
+            for i in range(10):
+                self.ball.goto(x+random.choice([-1,0,1])*3,y+random.choice([-1,0,1])*3)
+                time.sleep(.01)
+            self.ball.goto(x,y)
+            self.ball.x_vel = -1*self.ball.x_vel
+            self.ball.color(color)
+            self.pow1 -= 1
+            self.pow1_lockout = True
+
+    def golden_defense(self):
+        if not self.pow2_lockout and self.pow2 > 0 and abs(self.ycor()) < 260:
+            for i in range(3):
+                self.shapesize(8+2*i,.7+.25*i,1)
+                col = f'DarkGoldenrod{i+1}'
+                self.color(col)
+                time.sleep(.25)
+            self.width *= 1.3
+            self.height *= 2
+
+            self.move_dist *= 2
+            self.pow2 -= 1
+            self.pow2_lockout = True
+            self.pow2_is_active = True
+
+    def disable_beam(self):
+        if not self.pow3_lockout and self.pow3 > 0:
+            self.pow3_lockout = True
+            self.pow3 -= 1
+            self.beam = Turtle()
+            self.beam.penup()
+            self.beam.hideturtle()
+            self.beam.speed(6)
+            self.beam.color(self.pencolor())
+            self.beam.goto(self.xcor(),self.ycor())
+            self.beam.pendown()
+            self.beam.goto(-self.xcor(),self.ycor())
+            if y_dist(self.beam,self.other) < self.other.height:
+                self.other.move_lockout = True
+                self.other.disabled = True
+                self.other.color('gray')
+            self.beam.clear()
+            self.beam = None
+
+
 
 
 
