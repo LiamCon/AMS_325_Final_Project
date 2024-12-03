@@ -54,21 +54,28 @@ class Block(Turtle):
 
     def psychic_bounce(self):
         if not self.pow1_lockout and self.pow1 > 0 and abs(self.ball.ycor()) < 320:
+            self.pow1 -= 1
+            self.pow1_lockout = True
             color = self.ball.pencolor()
+            block_color = self.pencolor()
             x, y = self.ball.xcor(), self.ball.ycor()
+            self.color('DarkOrchid')
             self.ball.color('DarkOrchid')
-            time.sleep(.2)
+            time.sleep(.1)
             for i in range(10):
                 self.ball.goto(x+random.choice([-1,0,1])*3,y+random.choice([-1,0,1])*3)
                 time.sleep(.01)
             self.ball.goto(x,y)
             self.ball.x_vel = -1*self.ball.x_vel
             self.ball.color(color)
-            self.pow1 -= 1
-            self.pow1_lockout = True
+            self.color(block_color)
+
 
     def golden_defense(self):
         if not self.pow2_lockout and self.pow2 > 0 and abs(self.ycor()) < 260:
+            self.pow2 -= 1
+            self.pow2_lockout = True
+            self.pow2_is_active = True
             for i in range(3):
                 self.shapesize(8+2*i,.7+.25*i,1)
                 col = f'DarkGoldenrod{i+1}'
@@ -78,9 +85,7 @@ class Block(Turtle):
             self.height *= 2
 
             self.move_dist *= 2
-            self.pow2 -= 1
-            self.pow2_lockout = True
-            self.pow2_is_active = True
+
 
     def disable_beam(self):
         if not self.pow3_lockout and self.pow3 > 0:
@@ -97,6 +102,9 @@ class Block(Turtle):
             if y_dist(self.beam,self.other) < self.other.height:
                 self.other.move_lockout = True
                 self.other.disabled = True
+                self.other.pow1_lockout = True
+                self.other.pow2_lockout = True
+                self.other.pow3_lockout = True
                 self.other.color('gray')
             self.beam.clear()
             self.beam = None

@@ -40,12 +40,12 @@ for i in range(6):
 delay = .5                     #Time delay for ball to be launched
 
 time_step = .01
-num_delays = 20                #Used to prevent double collisions with blocks. Number of iterations before ball can be hit by block again
+num_delays = 5                #Used to prevent double collisions with blocks. Number of iterations before ball can be hit by block again
 current_delays = 0              #Starts counter for num_delays
 move_lockout_time = 5
 pow_lockout_time = 70
 pow2_duration = 250
-max_disable_duration = 60
+max_disable_duration = 80
 
 #Create blocks, ball, and scoreboard
 ball = Ball((0,0))
@@ -63,10 +63,22 @@ for round in range(2*points_to_win-1):
             time_1 = 0
             block1.color('blue')
             block2.color('red')
+            block1.shapesize(6,.7,1)
+            block1.width = 21
+            block1.height = 75
+            block1.move_dist = 40
+            block2.shapesize(6, .7, 1)
+            block2.width = 21
+            block2.height = 75
+            block2.move_dist = 40
             block1.goto((-450,0))
             block1.move_lockout = False
             block2.goto((450, 0))
             block2.move_lockout = False
+            block_1_pow2_lockout = 0
+            block_2_pow2_lockout = 0
+            block1.pow2_lockout = False
+            block2.pow2_lockout = False
 
             #This exists solely to unbind keys before ball has launched to prevent moving paddle between rounds
             screen.listen()
@@ -167,8 +179,14 @@ for round in range(2*points_to_win-1):
             block_2_pow3_lockout += 1
             if block1.disabled:
                 disable_timer_1 += 1
+                block_1_pow1_lockout -= 1
+                block_1_pow2_lockout -= 1
+                block_1_pow3_lockout -= 1
             if block2.disabled:
                 disable_timer_2 += 1
+                block_2_pow1_lockout -= 1
+                block_2_pow2_lockout -= 1
+                block_2_pow3_lockout -= 1
             if current_delays > num_delays:   #Resets delays and allows ball to collide again (only matters if ball has collided with a paddle)
                 current_delays = 0
                 ball.collision = True
@@ -178,7 +196,13 @@ for round in range(2*points_to_win-1):
                     block1.move_lockout = False
             elif disable_timer_1 >= max_disable_duration:
                 block_1_move_lockout = 0
+                block_1_pow1_lockout = 0
+                block_1_pow2_lockout = 0
+                block_1_pow3_lockout = 0
                 block1.move_lockout = False
+                block1.pow1_lockout = False
+                block1.pow2_lockout = False
+                block1.pow3_lockout = False
                 disable_timer_1 = 0
                 block1.disabled = False
                 block1.color('blue')
@@ -188,7 +212,13 @@ for round in range(2*points_to_win-1):
                     block2.move_lockout = False
             elif disable_timer_2 >= max_disable_duration:
                 block_2_move_lockout = 0
+                block_2_pow1_lockout = 0
+                block_2_pow2_lockout = 0
+                block_2_pow3_lockout = 0
                 block2.move_lockout = False
+                block2.pow1_lockout = False
+                block2.pow2_lockout = False
+                block2.pow3_lockout = False
                 disable_timer_2 = 0
                 block2.disabled = False
                 block2.color('red')
@@ -243,12 +273,24 @@ for round in range(2*points_to_win-1):
         # Each time a round resets the block positions and resets the ball
         if scoreboard.score1 < points_to_win and scoreboard.score2 < points_to_win:
             time_1 = 0
-            block1.goto((-450, 0))
             block1.color('blue')
             block2.color('red')
+            block1.shapesize(6, .7, 1)
+            block1.width = 21
+            block1.height = 75
+            block1.move_dist = 40
+            block2.shapesize(6, .7, 1)
+            block2.width = 21
+            block2.height = 75
+            block2.move_dist = 40
+            block1.goto((-450, 0))
             block1.move_lockout = False
             block2.goto((450, 0))
             block2.move_lockout = False
+            block_1_pow2_lockout = 0
+            block_2_pow2_lockout = 0
+            block1.pow2_lockout = False
+            block2.pow2_lockout = False
 
             # This exists solely to unbind keys before ball has launched to prevent moving paddle between rounds
             screen.listen()
@@ -367,8 +409,14 @@ for round in range(2*points_to_win-1):
             block_2_pow3_lockout += 1
             if block1.disabled:
                 disable_timer_1 += 1
+                block_1_pow1_lockout -= 1
+                block_1_pow2_lockout -= 1
+                block_1_pow3_lockout -= 1
             if block2.disabled:
                 disable_timer_2 += 1
+                block_2_pow1_lockout -= 1
+                block_2_pow2_lockout -= 1
+                block_2_pow3_lockout -= 1
             if current_delays > num_delays:  # Resets delays and allows ball to collide again (only matters if ball has collided with a paddle)
                 current_delays = 0
                 ball.collision = True
@@ -378,7 +426,13 @@ for round in range(2*points_to_win-1):
                     block1.move_lockout = False
             elif disable_timer_1 >= max_disable_duration:
                 block_1_move_lockout = 0
+                block_1_pow1_lockout = 0
+                block_1_pow2_lockout = 0
+                block_1_pow3_lockout = 0
                 block1.move_lockout = False
+                block1.pow1_lockout = False
+                block1.pow2_lockout = False
+                block1.pow3_lockout = False
                 disable_timer_1 = 0
                 block1.disabled = False
                 block1.color('blue')
@@ -388,7 +442,13 @@ for round in range(2*points_to_win-1):
                     block2.move_lockout = False
             elif disable_timer_2 >= max_disable_duration:
                 block_2_move_lockout = 0
+                block_2_pow1_lockout = 0
+                block_2_pow2_lockout = 0
+                block_2_pow3_lockout = 0
                 block2.move_lockout = False
+                block2.pow1_lockout = False
+                block2.pow2_lockout = False
+                block2.pow3_lockout = False
                 disable_timer_2 = 0
                 block2.disabled = False
                 block2.color('red')
