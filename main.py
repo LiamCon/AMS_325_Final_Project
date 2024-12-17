@@ -50,7 +50,7 @@ time_step = .01
 num_delays = 5                #Used to prevent double collisions with blocks. Number of iterations before ball can be hit by block again
 current_delays = 0              #Starts counter for num_delays
 move_lockout_time = 5           #Prevents spamming of movement to make game run better, can be lowered to allow faster movement at the expense of framerate
-pow_lockout_time = 7         #Time (in frames) before you can use a powerup after using it beforehand
+pow_lockout_time = 50         #Time (in frames) before you can use a powerup after using it beforehand
 pow2_duration = 250             #Time (in frames) the "golden defense" powerup lasts
 max_disable_duration = 80       #Movement lockout time (in frames) if hit by disable beam
 
