@@ -33,7 +33,7 @@ else:
     points_to_win = 5                 #Default is 5 points to win, medium speed, standard mode, no powerups
     speed_mode = 'm'
     game_mode = 's'
-    powers_flag = 'm'
+    powers_flag = 'n'
 num_powers = powers_dict[powers_flag]
 
 screen = Screen()
