@@ -326,6 +326,10 @@ class Ball(Turtle):
                 self.y_vel = -1.03 * self.y_vel
         self.bounce_counter += 1
 
+    def reset_position(self):
+        self.goto(0, 0)
+        self.x_vel = 0
+        self.y_vel = 0
 
 
 
